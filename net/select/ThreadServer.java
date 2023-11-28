@@ -51,8 +51,7 @@ public class ThreadServer {
                     e.printStackTrace();
                 }
             });
-            // 唤醒被阻塞的Selector, start()后阻塞了
-            // select类似LockSupport中的park，wakeup的原理类似LockSupport中的unpark
+            // 唤醒被阻塞的Selector, start()后阻塞了, 唤醒后会执行注册事件
             selector.wakeup();
         }
 

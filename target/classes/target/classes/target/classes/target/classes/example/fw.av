@@ -1,0 +1,13 @@
+for i in range(0, 10, 2) {
+  println("for：" +i);
+}
+
+let sum = 1;
+while sum < 20 {
+   println("sum: " + sum);
+   sum = sum + sum;
+}
+println("sum: " + sum);
+
+
+

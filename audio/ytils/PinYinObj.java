@@ -1,11 +1,15 @@
 package audio.ytils;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * x.z
@@ -13,14 +17,12 @@ import java.util.List;
  */
 public class PinYinObj {
 
+    public static final ConcurrentHashMap<String,Integer> retryMap = new ConcurrentHashMap<>();
     public static void main(String[] args) throws IOException {
-        List<String> lines = Files.readAllLines(Paths.get("D:\\linuxupload\\hot-rule_20231101-111051.txt"));
-        lines.sort(Comparator.comparing(String::length));
-        for (String l : lines) {
-            String[] split = l.split("=");
-            if (split[0].length() != split[1].length()){
-
-            }
-        }
+       retryMap.put("a",1);
+       retryMap.put("b",2);
+       retryMap.clear();
+       retryMap.put("c",3);
+        System.out.println(retryMap);
     }
 }

@@ -1,8 +1,5 @@
 package audio.ytils;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import jdk.internal.instrumentation.Logger;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.mp3.MP3AudioHeader;
 import org.jaudiotagger.audio.mp3.MP3File;
@@ -11,19 +8,47 @@ import org.jaudiotagger.audio.wav.util.WavInfoReader;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.UnsupportedAudioFileException;
-import java.io.*;
+import java.io.File;
+import java.io.RandomAccessFile;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * x.z
  * Create in 2023/4/27
  */
 public class AudioUtil {
+
+    public static void sliceBigFile(String slicePath, String sourceFileName, String name, float second) {
+
+        StringBuilder sb = new StringBuilder();
+        String str;
+        int count = (int) (second / 120);
+        // 无法整除，还有剩余音频部分
+        if(BigDecimal.valueOf(second).compareTo(BigDecimal.valueOf(120)) != 0) {
+            count += 1;
+        }
+        int j;
+        for (int i = 0; i < count; i++) {
+            j = 2 * i;
+            if (j >= 60) {
+                str = "01:" + (j - 60) + ":00";
+            } else {
+                str = "00:" + j + ":00";
+
+            }
+            // 分割路径
+            String sliceFileName = slicePath + "_" + i + "_"+ name ;
+            sb.append("ffmpeg").append(" -ss ").append(str).append(" -i ").append(sourceFileName)
+                    .append(" -c copy -t 120 ").append(sliceFileName);
+            System.out.println("ffmpeg命令，"+ sb);
+        }
+
+    }
+
+    public static void main(String[] args) {
+        sliceBigFile("/data/software/sound_stream/slice/", "/data/software/sound_stream/test.wav", "test", 309);
+    }
 
     public static Double getDb(byte[] audioBytes){
         // 字节数组中的音频数据转换为short类型的数据
@@ -150,8 +175,6 @@ public class AudioUtil {
         return second * 1000 + milliSecond;
     }
 
-    public static void main(String[] args) throws UnsupportedAudioFileException, IOException {
-        System.out.println(getPCMDurationMilliSecond("D:\\data\\8kt\\pro_right8.wav"));
-    }
+
 
 }

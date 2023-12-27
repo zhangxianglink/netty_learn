@@ -31,14 +31,14 @@ public class JsonFile {
         String[] split = line.split("最后结果");
         String s = split[0];
         String[] split1 = s.split(".mp3");
-        String name = split1[0].substring(split1[0].length() - 6);
+        String name = split1[0].substring(split1[0].length() - 24);
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         JsonParser jp = new JsonParser();
         JsonElement je = jp.parse(split[1].trim());
         String prettyJsonString = gson.toJson(je);
 
-        String file= "C:\\Users\\admin\\Desktop\\新建文件夹 (4)\\" + name + ".txt";
+        String file= "D:\\data\\dudu\\" + name + ".txt";
         Files.write(Paths.get(file), Arrays.asList(prettyJsonString));
     }
 }

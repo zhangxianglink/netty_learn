@@ -1,20 +1,12 @@
 package audio.slice;
 
-import audio.ytils.HttpUtils;
-import com.google.gson.Gson;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.io.FilenameUtils;
+import com.google.common.collect.Lists;
 
-import javax.sound.sampled.UnsupportedAudioFileException;
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.channels.FileChannel;
-import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * x.z
@@ -25,14 +17,10 @@ public class Vad {
 
 
     public static void main(String[] args) throws IOException {
-        List<String> lines = Files.readAllLines(Paths.get("D:\\linuxupload\\hot-rule_20231101-111051.txt"));
-        lines.forEach(line -> {
-            String[] split = line.split("=");
-            String url = split[0];
-            String name = split[1];
-           if (name.contains("清楚")){
-               System.out.println(line);
-           }
-        });
+        HashMap<Integer, ArrayList<String>> listHashMap = new HashMap<>();
+        listHashMap.put(1, Lists.newArrayList("1.mp3"));
+        listHashMap.put(2, Lists.newArrayList("2.mp3","x"));
+        listHashMap.put(3, Lists.newArrayList("3.mp3","y"));
+        System.out.println(listHashMap.values().stream().flatMap(List::stream).collect(Collectors.toList()));
     }
 }

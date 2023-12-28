@@ -1,10 +1,7 @@
 package net.netty.p8;
 
-import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -16,15 +13,15 @@ import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpServerCodec;
 
 import java.net.InetSocketAddress;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 import static io.netty.handler.codec.rtsp.RtspHeaderNames.CONTENT_LENGTH;
 
 /**
  * x.z
- * Create in 2023/12/27
- * http 协议  http://localhost:8000/x.html
+ * Create in 2023/12/28
+ * http 协议
+ * http://localhost:8000/x.html
  */
 public class TestProtocol2 {
     public static void main(String[] args) throws InterruptedException {

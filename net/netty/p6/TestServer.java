@@ -15,6 +15,7 @@ import java.nio.charset.StandardCharsets;
 /**
  * x.z
  * Create in 2023/12/21
+ * 相互通信
  */
 public class TestServer {
     public static void main(String[] args) {

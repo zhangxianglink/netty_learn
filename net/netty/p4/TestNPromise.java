@@ -21,9 +21,10 @@ public class TestNPromise {
         new Thread(() -> {
             try {
                 Thread.sleep(1000);
+//                int a = 10 /0;
                 promise.setSuccess("success");
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                promise.setFailure(new RuntimeException(e));
             }
         }).start();
 

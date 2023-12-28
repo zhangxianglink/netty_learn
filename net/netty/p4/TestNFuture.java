@@ -25,13 +25,14 @@ public class TestNFuture {
             }
             return 3;
         });
-        System.out.println(future.get());
+
 
         future.addListener(f -> {
             System.out.println("2");
             System.out.println(f.getNow());
             group.shutdownGracefully();
         });
+
 
     }
 }

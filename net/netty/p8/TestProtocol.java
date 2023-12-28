@@ -14,6 +14,7 @@ import java.nio.charset.Charset;
 /**
  * x.z
  * Create in 2023/12/27
+ * redis 协议
  */
 public class TestProtocol {
     public static void main(String[] args) throws InterruptedException {
@@ -46,13 +47,12 @@ public class TestProtocol {
                                 buffer.writeBytes(LINE);
                                 ctx.writeAndFlush(buffer);
                             }
+                            @Override
+                            public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+                                ByteBuf buf = (ByteBuf) msg;
+                                System.out.println("返回结果：" + buf.toString(Charset.defaultCharset()));
+                            }
                         });
-                    }
-
-                    @Override
-                    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-                        ByteBuf buf = (ByteBuf) msg;
-                        System.out.println("返回结果：" + buf.toString(Charset.defaultCharset()));
                     }
                 })
                 .connect(new InetSocketAddress("192.168.1.1", 6379))

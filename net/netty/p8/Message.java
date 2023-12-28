@@ -19,8 +19,6 @@ public class Message implements Serializable {
         this.message = message;
     }
 
-    public Message() {
-    }
 
     @Override
     public String toString() {

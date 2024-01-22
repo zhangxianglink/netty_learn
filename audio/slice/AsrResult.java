@@ -1,66 +1,31 @@
 package audio.slice;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * x.z
  * Create in 2023/5/8
  */
 public class AsrResult {
-    private List<Transcribe> results;
+    public static void main(String[] args) throws IOException {
+        List<String> allLines = Files.readAllLines(Paths.get("C:\\Users\\admin\\Desktop\\6026\\28w.txt"));
+        List<String> lines = Files.readAllLines(Paths.get("C:\\Users\\admin\\Desktop\\6026\\27w.txt"));
 
-    public List<Transcribe> getResults() {
-        return results;
-    }
+        Map<String, Integer> collect = allLines.stream().collect(Collectors.toMap(s -> s, s -> 0));
 
-    public void setResults(List<Transcribe> results) {
-        this.results = results;
-    }
-
-    @Override
-    public String toString() {
-        return "AsrResult{" +
-                "results=" + results +
-                '}';
-    }
-
-    class Transcribe{
-        private    String filename;
-        private String result ;
-        private Double rtf;
-
-        public String getFilename() {
-            return filename;
+        for (String line : lines) {
+            collect.put(line, 1);
         }
 
-        public void setFilename(String filename) {
-            this.filename = filename;
-        }
-
-        public String getResult() {
-            return result;
-        }
-
-        public void setResult(String result) {
-            this.result = result;
-        }
-
-        public Double getRtf() {
-            return rtf;
-        }
-
-        public void setRtf(Double rtf) {
-            this.rtf = rtf;
-        }
-
-        @Override
-        public String toString() {
-            return "Transcribe{" +
-                    "filename='" + filename + '\'' +
-                    ", result='" + result + '\'' +
-                    ", rtf=" + rtf +
-                    '}';
-        }
+        collect.forEach((k, v) -> {
+            if (v == 0) {
+                System.out.println(k);
+            }
+        });
     }
 }

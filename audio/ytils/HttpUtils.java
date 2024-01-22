@@ -60,7 +60,6 @@ public class HttpUtils {
             }else {
                 result = "";
             }
-            System.out.println("请求{} 返回结果：{}" + url + result);
             return result;
         } catch (IOException e) {
             e.printStackTrace();

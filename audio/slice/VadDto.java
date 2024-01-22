@@ -1,95 +1,56 @@
 package audio.slice;
 
+
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
 /**
  * x.z
  * Create in 2023/5/15
  */
 public class VadDto {
+    public static void main(String[] args) throws IOException, InterruptedException {
+//        StringBuilder sb = new StringBuilder();
+//        sb.append("ffmpeg -i D:\\linuxupload\\20068.wav -ss ")
+//                .append(formatTime(23)).append(" -to ")
+//                .append(formatTime(29))
+//                .append(" -c copy D:\\linuxupload\\29.wav ");
+//        Runtime.getRuntime().exec(sb.toString());
 
-    private String type;
-    private    Double start;
-    private    Double end;
-    private    String filename;
-    private String result ;
-    private Double rtf;
 
-    private Double time;
 
-    public Double getTime() {
-        return time;
+
+        ProcessBuilder pb = new ProcessBuilder(
+                "ffmpeg",
+                "-i",
+                "D:\\linuxupload\\20068.wav",
+                "-ss",
+                formatTime(23),
+                "-to",
+                formatTime(30),
+                "-c",
+                "copy",
+                "D:\\linuxupload\\30.wav"
+        );
+
+        Process start = pb.start();
+        boolean completed = start.waitFor(5, TimeUnit.SECONDS);
+        if (completed) {
+            if (start.exitValue() != 0) {
+                System.out.println("a");
+            }else {
+                System.out.println("b");
+            }
+        } else {
+            System.out.println("子进程未在规定时间内结束");
+        }
+        start.destroy();
     }
 
-    public void setTime(Double time) {
-        this.time = time;
-    }
-
-    @Override
-    public String toString() {
-        return "VadDto{" +
-                "type='" + type + '\'' +
-                ", start=" + start +
-                ", end=" + end +
-                ", filename='" + filename + '\'' +
-                ", result='" + result + '\'' +
-                ", rtf=" + rtf +
-                ", time=" + time +
-                '}';
-    }
-
-    public VadDto(String type, Double start, Double end, String filename, String result, Double rtf) {
-        this.type = type;
-        this.start = start;
-        this.end = end;
-        this.filename = filename;
-        this.result = result;
-        this.rtf = rtf;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public Double getStart() {
-        return start;
-    }
-
-    public void setStart(Double start) {
-        this.start = start;
-    }
-
-    public Double getEnd() {
-        return end;
-    }
-
-    public void setEnd(Double end) {
-        this.end = end;
-    }
-
-    public String getFilename() {
-        return filename;
-    }
-
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
-
-    public String getResult() {
-        return result;
-    }
-
-    public void setResult(String result) {
-        this.result = result;
-    }
-
-    public Double getRtf() {
-        return rtf;
-    }
-
-    public void setRtf(Double rtf) {
-        this.rtf = rtf;
+    private static String formatTime(long totalSeconds) {
+        long hours = totalSeconds / 3600; // 小时数
+        long minutes = (totalSeconds % 3600) / 60; // 分钟数
+        long seconds = totalSeconds % 60; // 秒数
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 }

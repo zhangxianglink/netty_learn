@@ -2,6 +2,8 @@ package audio.v3;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import javax.sound.sampled.*;
 
@@ -20,18 +22,18 @@ public class AudioDBCalculator {
         audioStream.read(audioBytes);
 
 
-        byte[] tmp = new byte[1600];
+        byte[] tmp = new byte[3200];
         int bytesIndex = 0;
         for (int i = 0; i < audioBytes.length; i++) {
             tmp[bytesIndex++] = audioBytes[i];
-            if (bytesIndex == 1600) {
+            if (bytesIndex == 3200) {
                 System.out.println(getDb(tmp));
                 bytesIndex = 0;
             }
         }
         if (bytesIndex > 0) { // if there is any leftover data
             byte[] leftover = Arrays.copyOf(tmp, bytesIndex);
-//            System.out.println(getDb(leftover));
+            System.out.println(getDb(leftover));
         }
 
 
@@ -47,14 +49,10 @@ public class AudioDBCalculator {
 
         // 计算音频的均方根
         double rms = calculateRMS(audioData);
-
-        if (rms > 0) {
-            // 计算分贝大小
-            return  20 * Math.log10(rms);
-        }
-
-        return 0.0;
+        return  Math.abs(20 * Math.log10(rms));
     }
+
+
 
     private static double calculateRMS(short[] audioData) {
         double sum = 0;
@@ -67,7 +65,7 @@ public class AudioDBCalculator {
 
     // 使用示例
     public static void main(String[] args) throws UnsupportedAudioFileException, IOException {
-        String audioFilePath = "D:\\linuxupload\\right.wav";
+        String audioFilePath = "D:\\linuxupload\\16k.wav";
         calculateDB(audioFilePath);
     }
 }

@@ -6,6 +6,7 @@ import com.mayabot.nlp.module.pinyin.PinyinResult;
 import com.mayabot.nlp.module.pinyin.Pinyins;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -22,10 +23,10 @@ import java.util.stream.Collectors;
  */
 public class MyPinyinTest {
     public static void main(String[] args) throws IOException {
-        LocalDateTime now = LocalDateTime.now();
-        System.out.println(convertHotWords("好的那您先不挂机给您讲完一下哈套餐呢还需保留员套餐正常用好登记办理好十元五G组合绑架邮包三个工作日生效谢谢东西真效后立即扣费正款不抵扣月十万的费用如果您有副卡的话可以共享这个流量和通话的哈流量用不完的话也可以结转到下个月的语音不结转那您再有五十终端午就芒果会在线细节节享受五G芒果五十信号了哈您都清楚了对吧"));
-        System.out.println(Duration.between(now, LocalDateTime.now()).toMillis());
+//        System.out.println(convertHotWords("好的那您先不挂机给您讲完一下哈套餐呢还需保留员套餐正常用好登记办理好十元五G组合绑架邮包三个工作日生效谢谢东西真效后立即扣费正款不抵扣月十万的费用如果您有副卡的话可以共享这个流量和通话的哈流量用不完的话也可以结转到下个月的语音不结转那您再有五十终端午就芒果会在线细节节享受五G芒果五十信号了哈您都清楚了对吧"));
 
+        File file = new File("D:\\linuxupload\\test8.wav");
+        System.out.println(file.length());
 
     }
 

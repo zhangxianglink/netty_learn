@@ -1,5 +1,9 @@
 package audio.ytils;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -17,12 +21,19 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class PinYinObj {
 
-    public static final ConcurrentHashMap<String,Integer> retryMap = new ConcurrentHashMap<>();
+
     public static void main(String[] args) throws IOException {
-       retryMap.put("a",1);
-       retryMap.put("b",2);
-       retryMap.clear();
-       retryMap.put("c",3);
-        System.out.println(retryMap);
+       String httpUrl = "http://192.168.1.53:21601/cc/atm/tprecord/msa/record/kfDownRecordfile?fileName=2605027565886939715.wav&filePath=acdrecord2/51/20240204/10/2605027565886939715.wav&proId=51" ;
+       String fileName = FilenameUtils.getName(httpUrl);
+       String[] split = fileName.split("\\.");
+       String wavName;
+        String type = split[1];
+        if (!type.equals("wav")){
+            wavName = split[0] + ".wav";
+        }else {
+            wavName = fileName;
+        }
+        System.out.println(wavName);
+        System.out.println(type);
     }
 }

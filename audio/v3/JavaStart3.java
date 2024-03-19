@@ -89,7 +89,7 @@ public class JavaStart3 {
 
 
         // 建立语音识别功能的websocket连接
-        JavaClient client2 = new JavaClient(new URI("ws://192.168.6.102:6026"));
+        JavaClient client2 = new JavaClient(new URI("ws://192.168.166.14:8080"));
 
 
         client2.connect();

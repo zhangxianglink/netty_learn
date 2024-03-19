@@ -6,14 +6,15 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * x.z
  * Create in 2023/7/25
  */
 public class JsonFile2 {
+
+
     // 根据返回的asr信息生成文件
     public static void main(String[] args) throws IOException {
         Path path = Paths.get("D:\\linuxupload\\demo.log");
@@ -31,13 +32,16 @@ public class JsonFile2 {
         JsonObject jsonObject = returnData.getAsJsonObject("header");
         String task_id = jsonObject.get("task_id").getAsString();
 
-
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        JsonParser jp = new JsonParser();
-        JsonElement je = jp.parse(s);
-        String prettyJsonString = gson.toJson(je);
-
-        String file= "C:\\Users\\admin\\Desktop\\debug\\22\\" + task_id + ".txt";
-        Files.write(Paths.get(file), Arrays.asList(prettyJsonString));
+        JsonObject payload = returnData.getAsJsonObject("payload");
+        JsonArray sentences = payload.getAsJsonArray("sentences");
+        ArrayList<String> arrayList = new ArrayList<>();
+        sentences.forEach(sentence -> {
+            JsonObject asJsonObject = sentence.getAsJsonObject();
+            String channel_id = asJsonObject.get("channel_id").getAsString().equals("1") ? "坐席" : "客户";
+            String text = asJsonObject.get("text").getAsString();
+            arrayList.add(channel_id + "：" + text);
+        });
+        String file= "D:\\linuxupload\\Desktop\\" + task_id  + ".txt";
+        Files.write(Paths.get(file), arrayList);
     }
 }

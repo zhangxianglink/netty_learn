@@ -27,21 +27,21 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
 
     // 在一个Handler被添加到ChannelPipeline后,它自己的handlerAdded()方法作为第一个被调用。
     public void handlerAdded(ChannelHandlerContext ctx) {
-//        logger.debug("handler added channelid:{}", ctx.channel().id());
+        System.out.println("handler added channelid:{}" + ctx.channel().id());
         this.handshakeFuture = ctx.newPromise();
     }
 
     // handshaker 已经提供： 表示通道已激活,此时可以调用handshake()方法开始握手。
     public void channelActive(ChannelHandlerContext ctx) {
-//        logger.debug("channel active,id:{},{}", ctx.channel().id(), Thread.currentThread().getId());
+        System.out.println("channel active,id:{},{}"+ ctx.channel().id() + Thread.currentThread().getId());
     }
 
 //    表示连接已断开,做清理工作如关闭资源。
     public void channelInactive(ChannelHandlerContext ctx) {
         if (ctx.channel() != null) {
-//            logger.debug("channelInactive:" + ctx.channel().id());
+            System.out.println("channelInactive:" + ctx.channel().id());
         } else {
-//            logger.debug("channelInactive");
+            System.out.println("channelInactive");
         }
         // 判断WebSocket连接握手是否已经完成
         if (!this.handshaker.isHandshakeComplete()) {
@@ -52,7 +52,7 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
                 errorMsg = "channel inactive during handshake";
             }
 
-//            logger.debug(errorMsg);
+            System.out.println(errorMsg);
             this.handshakeFuture.setFailure(new Exception(errorMsg));
         }
 
@@ -71,11 +71,11 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
                 // 处理握手响应完成握手,如果成功调用success()方法
                 this.handshaker.finishHandshake(ch, response);
                 this.handshakeFuture.setSuccess();
-//                logger.debug("WebSocket Client connected! response headers:{}", response.headers());
+                System.out.println("WebSocket Client connected! response headers: " + response.headers());
             } catch (WebSocketHandshakeException var7) {
                 FullHttpResponse res = (FullHttpResponse)msg;
                 String errorMsg = String.format("WebSocket Client failed to connect,status:%s,reason:%s", res.status(), res.content().toString(CharsetUtil.UTF_8));
-//                logger.error(errorMsg);
+                System.out.println(errorMsg);
                 this.handshakeFuture.setFailure(new Exception(errorMsg));
             }
 
@@ -91,9 +91,9 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
                 BinaryWebSocketFrame binFrame = (BinaryWebSocketFrame)frame;
                 this.listener.onMessage(binFrame.content().nioBuffer());
             } else if (frame instanceof PongWebSocketFrame) {
-//                logger.debug("WebSocket Client received pong");
+                System.out.println("WebSocket Client received pong");
             } else if (frame instanceof CloseWebSocketFrame) {
-//                logger.debug("receive close frame");
+                System.out.println("receive close frame");
                 this.listener.onClose(((CloseWebSocketFrame)frame).statusCode(), ((CloseWebSocketFrame)frame).reasonText());
                 ch.close();
             }
@@ -107,7 +107,6 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
         if (!this.handshakeFuture.isDone()) {
             this.handshakeFuture.setFailure(cause);
         }
-//        logger.error("error", cause);
         ctx.close();
     }
 }

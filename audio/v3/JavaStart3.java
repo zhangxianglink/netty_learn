@@ -120,7 +120,7 @@ public class JavaStart3 {
         byte[] bytesToSend = buffer2.array();
 
         System.out.println("bytesToSend: " + bytesToSend.length);
-
+        Thread.sleep(1000);
 
      /*   // 创建预加重对象
         PreEmphasis preEmphasis = new PreEmphasis(0.97); // 0.97是一个常用的预加重系数

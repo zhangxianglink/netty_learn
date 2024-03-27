@@ -89,7 +89,5 @@ public class PyResult {
         this.is_final = is_final;
     }
 
-    public static void main(String[] args) {
-        System.out.println("131-3195失败".length());
-    }
+
 }

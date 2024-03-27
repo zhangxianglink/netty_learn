@@ -1,12 +1,19 @@
 package audio.slice;
 
-import audio.v3.format;
+import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * x.z
@@ -14,10 +21,66 @@ import java.io.*;
  * 左右声道分离成功
  */
 public class vad3 {
+    private static final byte[] SPLIT_BYTE = {0x01};
     public static void main(String[] args) throws UnsupportedAudioFileException, IOException {
-        sliceWav("D:\\data\\out\\222.wav","D:\\data\\out\\left.wav","D:\\data\\out\\right.wav");
+        Gson gson = new Gson();
+        List<String> lines = Files.readAllLines(Paths.get("C:\\Users\\admin\\Desktop\\备份sql\\1.sql"));
+        List<String> collect = lines.stream().limit(1).collect(Collectors.toList());
+        for (String line : collect) {
+            StringBuilder str = new StringBuilder();
+            String[] split = line.split(", ");
+            long id = Long.parseLong(split[0]);
+            HashMap hashMap = gson.fromJson(split[2], HashMap.class);
+            LinkedTreeMap data = (LinkedTreeMap) hashMap.get("data");
+            String chunk_message = (String) data.get("chunk_message");
+            System.out.println(chunk_message);
+            String[] strings = chunk_message.split("n");
+            for (int i = 0; i < strings.length - 1; i++) {
+                if (strings[i].length() > 0) {
+                    String s = strings[i] + "\\n";
+                    String json = "data: {\"model\": \"gpt4-641\",\"data\": {\"chunk_message\": \"" + s + "\",\"finish_reason\": null}}";
+                    str.append(json).append(new String(SPLIT_BYTE));
+                }
+            }
+            String last = strings[strings.length - 1];
+            data.put("chunk_message",last);
+            str.append("data: "+gson.toJson(hashMap)).append(new String(SPLIT_BYTE));
+
+            System.out.println(id);
+            System.out.println(str);
+        }
 
     }
+
+    /**
+     * 将字符串按照指定长度分割成字符串数组
+     *
+     * @param text   需要拆取的字符串
+     * @param length 截取的长度
+     * @return
+     */
+    public static String[] stringToStringArray(String text, int length) {
+        //检查参数是否合法
+        if (StringUtils.isEmpty(text)) {
+            return null;
+        }
+
+        if (length <= 0) {
+            return null;
+        }
+        //获取整个字符串可以被切割成字符子串的个数
+        int n = (text.length() + length - 1) / length;
+        String[] splitArr = new String[n];
+        for (int i = 0; i < n; i++) {
+            if (i < (n - 1)) {
+                splitArr[i] = text.substring(i * length, (i + 1) * length);
+            } else {
+                splitArr[i] = text.substring(i * length);
+            }
+        }
+        return splitArr;
+    }
+
 
     public static void sliceWav(String fileName, String leftPath, String rightPath) throws UnsupportedAudioFileException, IOException {
         File file = new File(fileName);

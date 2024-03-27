@@ -33,7 +33,10 @@ public class ClientTest {
                                 @Override
                                 public void onOpen() {}
                                 @Override
-                                public void onClose(int var1, String var2) {}
+                                public void onClose(int var1, String var2) {
+                                    System.out.println("断开与客户端的连接："+var1 +"  "+var2);
+                                    channel.close();
+                                }
                                 @Override
                                 public void onMessage(String var1) {
                                     System.out.println(var1);
@@ -42,8 +45,8 @@ public class ClientTest {
                                 @Override
                                 public void onMessage(ByteBuffer var1) {}
                             }, 5);
-                            ChannelPipeline pipeline = ch.pipeline();
 
+                            ChannelPipeline pipeline = ch.pipeline();
                             pipeline.addLast(new HttpServerCodec()); // HTTP 协议解析，用于握手阶段
                             pipeline.addLast(new HttpObjectAggregator(65536)); // HTTP 协议解析，用于握手阶段
                             pipeline.addLast(new WebSocketServerCompressionHandler()); // WebSocket 数据压缩扩展

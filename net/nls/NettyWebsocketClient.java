@@ -11,6 +11,7 @@ import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.websocketx.WebSocketClientHandshaker;
 import io.netty.handler.codec.http.websocketx.WebSocketClientHandshakerFactory;
 import io.netty.handler.codec.http.websocketx.WebSocketVersion;
+import io.netty.handler.timeout.ReadTimeoutHandler;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -22,16 +23,17 @@ public class NettyWebsocketClient {
     EventLoopGroup group = new NioEventLoopGroup(0);
     Bootstrap bootstrap = new Bootstrap();
     final String url;
-    public NettyWebsocketClient(String url) throws URISyntaxException {
+    public NettyWebsocketClient(String url) {
         this.url = url;
         // 连接组
-        ((Bootstrap)((Bootstrap)((Bootstrap) this.bootstrap.option(ChannelOption.TCP_NODELAY, true))
-                .group(this.group))
+        ((Bootstrap) ((Bootstrap) this.bootstrap.option(ChannelOption.TCP_NODELAY, true))
+                .group(this.group)
                 .channel(NioSocketChannel.class))
                 .handler(new ChannelInitializer<SocketChannel>() {
                     protected void initChannel(SocketChannel ch) {
                         ChannelPipeline p = ch.pipeline();
                         p.addLast(new ChannelHandler[]{new HttpClientCodec(), new HttpObjectAggregator(8192)});
+                        p.addLast(new ReadTimeoutHandler(5, TimeUnit.SECONDS));
                         // 添加入站事件处理器
                         p.addLast("hookedHandler", new WebSocketClientHandler());
                     }

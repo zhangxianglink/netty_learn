@@ -1,6 +1,7 @@
 package audio.v3;
 
 import org.java_websocket.WebSocket;
+import org.java_websocket.drafts.Draft_6455;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -14,6 +15,7 @@ import java.nio.ByteOrder;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  * x.z
@@ -86,10 +88,10 @@ public class JavaStart3 {
         int channels = format.getChannels();
 
 
-
-
+        HashMap<String, String> map = new HashMap<>();
+        map.put("token","mmmmmmmm");
         // 建立语音识别功能的websocket连接
-        JavaClient client2 = new JavaClient(new URI("ws://192.168.166.14:8080"));
+        JavaClient client2 = new JavaClient(new URI("ws://192.168.166.14:8080"),new Draft_6455(),map,0);
 
 
         client2.connect();

@@ -36,7 +36,7 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
         System.out.println("channel active,id:{},{}"+ ctx.channel().id() + Thread.currentThread().getId());
     }
 
-//    表示连接已断开,做清理工作如关闭资源。
+    //TODO 下游断开，同时关闭上游
     public void channelInactive(ChannelHandlerContext ctx) {
         if (ctx.channel() != null) {
             System.out.println("channelInactive:" + ctx.channel().id());
@@ -61,8 +61,8 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
         }
 
     }
-
-    public void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
+    //TODO 处理asr返回的信息
+    public void channelRead0(ChannelHandlerContext ctx, Object msg) {
         Channel ch = ctx.channel();
         FullHttpResponse response;
         if (!this.handshaker.isHandshakeComplete()) {

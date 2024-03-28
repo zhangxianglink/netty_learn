@@ -1,4 +1,5 @@
 package net.nls;
+
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -14,7 +15,6 @@ import io.netty.handler.codec.http.websocketx.WebSocketVersion;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.concurrent.TimeUnit;
 
 public class NettyWebsocketClient {
@@ -26,9 +26,9 @@ public class NettyWebsocketClient {
     public NettyWebsocketClient(String url) {
         this.url = url;
         // 连接组
-        ((Bootstrap) ((Bootstrap) this.bootstrap.option(ChannelOption.TCP_NODELAY, true))
+        this.bootstrap.option(ChannelOption.TCP_NODELAY, true)
                 .group(this.group)
-                .channel(NioSocketChannel.class))
+                .channel(NioSocketChannel.class)
                 .handler(new ChannelInitializer<SocketChannel>() {
                     protected void initChannel(SocketChannel ch) {
                         ChannelPipeline p = ch.pipeline();
@@ -47,7 +47,7 @@ public class NettyWebsocketClient {
         // channel完成
 
         // WebSocketClientHandshaker: 表示一个WebSocket客户端握手器
-        WebSocketClientHandshaker handshaker = WebSocketClientHandshakerFactory.newHandshaker(new URI("ws://192.168.6.102:6026"), WebSocketVersion.V13, (String)null, true, httpHeaders, 196608);
+        WebSocketClientHandshaker handshaker = WebSocketClientHandshakerFactory.newHandshaker(new URI("ws://192.168.6.102:6026"), WebSocketVersion.V13, null, true, httpHeaders, 196608);
         WebSocketClientHandler handler = (WebSocketClientHandler)channel.pipeline().get("hookedHandler");
         // 添加用户的信息处理器
         handler.setListener(listener);
@@ -68,7 +68,6 @@ public class NettyWebsocketClient {
             if (channel.isActive()) {
                 channel.close();
             }
-
             if (handshakeFuture.cause() != null) {
                 throw new Exception("Handshake timeout!", handshakeFuture.cause());
             } else {

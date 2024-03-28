@@ -30,7 +30,6 @@ public class NettyConnection {
             TextWebSocketFrame frame = new TextWebSocketFrame(payload);
             this.channel.writeAndFlush(frame);
         }
-
     }
 
     public void sendBinary(byte[] payload) {
@@ -38,7 +37,6 @@ public class NettyConnection {
             BinaryWebSocketFrame frame = new BinaryWebSocketFrame(Unpooled.wrappedBuffer(payload));
             this.channel.writeAndFlush(frame);
         }
-
     }
 
     public void sendPing() {
@@ -46,6 +44,5 @@ public class NettyConnection {
         if (this.channel != null && this.channel.isActive()) {
             this.channel.writeAndFlush(frame);
         }
-
     }
 }
